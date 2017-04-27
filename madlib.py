@@ -68,6 +68,7 @@ def madlib(title):
 
 subreddits = ['circlejerk', 'tifu', 'todayilearned', 'news', 'nottheonion', 'askreddit', 'showerthoughts']
 
+
 while True:
 
 	reddit = praw.Reddit('madlib', user_agent="badass python")
@@ -93,5 +94,5 @@ while True:
 				pass
 			print("[%s] %s%s" % ("Success" if success else "Fail",pre,ml))
 			break
-	time.sleep(60*25)
+	time.sleep(60*random.choice(range(10,30)))
 
