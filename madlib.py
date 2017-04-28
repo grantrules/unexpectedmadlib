@@ -68,31 +68,31 @@ def madlib(title):
 
 subreddits = ['circlejerk', 'tifu', 'todayilearned', 'news', 'nottheonion', 'askreddit', 'showerthoughts']
 
+reddit = praw.Reddit('madlib', user_agent="badass python")
 
 while True:
 
-	reddit = praw.Reddit('madlib', user_agent="badass python")
+	try:
+		for submission in reddit.subreddit("+".join(subreddits)).random_rising(limit=25):
+			pre = ''
+			title = submission.title
+			if title[0:3] == 'TIL':
+				title = title[4:]
+				pre = 'TIL '
+			if title[0:4] == 'TIFU':
+				title = title[5:]
+				pre = 'TIFU '
+			ml = madlib(title)
+			if ml:
+				success = True
+				try:
+					submission.reply("%s%s" % (pre,ml))
+				except Exception:
+					success = False
 
-	for submission in reddit.subreddit("+".join(subreddits)).random_rising(limit=25):
-		pre = ''
-		title = submission.title
-		if title[0:3] == 'TIL':
-			title = title[4:]
-			pre = 'TIL '
-		if title[0:4] == 'TIFU':
-			title = title[5:]
-			pre = 'TIFU '
-		ml = madlib(title)
-		if ml:
-			success = True
-			try:
-				submission.reply("%s%s" % (pre,ml))
-			except Exception:
-				success = False
-				#you tried your best and failed miserably
-				#the lesson is: never try
-				pass
-			print("[%s] %s%s" % ("Success" if success else "Fail",pre,ml))
-			break
+				print("[%s] %s%s" % ("Success" if success else "Fail",pre,ml))
+				break
+	except:
+		print("[Fail] !!! Unable to fetch submissions")
 	time.sleep(60*random.choice(range(10,30)))
 
