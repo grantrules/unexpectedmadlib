@@ -17,25 +17,19 @@ IN preposition -------------------------------- in
 complementizer -------------------------------- that
 DT determiner --------------------------------- the
 
-structures:
+i think we want to use VB, NNS, NN, VBD
 
-label long name example (represented by terminal string)
-NP noun phrase their public lectures
-VP verb phrase built the pyramid
-PP prepositional
-phrase
-in the five chambers
-S sentence Khufu built the pyramid
-SBAR sbar that Khufu built the pyramid
-
-
-i tink we want to use VB, NNS, NN, VBD
+other thoughts are to break down the sentence
+structure build better madlibs rather than
+choosing words at random
 
 """
 
-typeset = {'JJ': '__adjective__', 'JJS': '__adjective__', 'RB': '__adverb__', 'NNP': '__noun__', 'VB': '__verb__', 'NNS': '__plural noun__', 'NN': "__noun__", 'VBD': "__past-tense verb__" }
+typeset = {'JJ': '__adjective__', 'JJS': '__adjective__', 'RB': '__adverb__', 'NNP': '__noun__', 'VB': '__verb__', 'VBN': '__verb__', 'NNS': '__plural noun__', 'NN': "__noun__", 'VBD': "__past-tense verb__" }
 
 wordtypes = typeset.keys()
+
+preamble = ["TIL", "TIFU"]
 
 
 def madlib(title):
@@ -76,12 +70,12 @@ while True:
 		for submission in reddit.subreddit("+".join(subreddits)).random_rising(limit=25):
 			pre = ''
 			title = submission.title
-			if title[0:3] == 'TIL':
-				title = title[4:]
-				pre = 'TIL '
-			if title[0:4] == 'TIFU':
-				title = title[5:]
-				pre = 'TIFU '
+            
+			for p in preamble:
+				if title[0:len(p)] == p:
+					pre = p
+					title = title[len(p)+1:]
+
 			ml = madlib(title)
 			if ml:
 				success = True
